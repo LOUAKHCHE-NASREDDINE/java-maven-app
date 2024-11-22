@@ -1,0 +1,45 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent none
+    tools {
+        maven 'Maven'
+    }
+    stages {
+        stage('build jar') {
+            steps {
+                script {
+                    echo "Building the application..."
+                    sh 'mvn clean package'
+                }
+            }
+        }
+        stage('build image') {
+            steps {
+                script {
+                    echo "Building the docker image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                        sh 'docker build -t nasser/myapp:2.2.2 .'
+                        sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                        sh 'docker push nasser/myapp:2.2.2'
+                    }
+                }
+            }
+        }
+        stage('test') {
+            steps {
+                script {
+                    echo "Testing the application..."
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                script {
+                    echo "Deploying the application..."
+                }
+            }
+        }
+    }
+}

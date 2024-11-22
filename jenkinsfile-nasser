@@ -1,12 +1,11 @@
-#!/usr/bin/env groovy
-
 pipeline {
-    agent none
+    agent any
     tools {
         maven 'Maven'
     }
     stages {
         stage('build jar') {
+            agent { label 'your-node-label' }
             steps {
                 script {
                     echo "Building the application..."
@@ -15,6 +14,7 @@ pipeline {
             }
         }
         stage('build image') {
+            agent { label 'your-node-label' }
             steps {
                 script {
                     echo "Building the docker image..."
@@ -28,6 +28,7 @@ pipeline {
             }
         }
         stage('test') {
+            agent { label 'your-node-label' }
             steps {
                 script {
                     echo "Testing the application..."
@@ -35,6 +36,7 @@ pipeline {
             }
         }
         stage('deploy') {
+            agent { label 'your-node-label' }
             steps {
                 script {
                     echo "Deploying the application..."

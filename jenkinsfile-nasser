@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     echo "Building the application..."
-                    sh 'mvn clean package'
+                    sh 'mvn package'
                 }
             }
         }
@@ -27,7 +27,13 @@ pipeline {
                 }
             }
         }
-       
+        stage('test') {
+            steps {
+                script {
+                    echo "Testing the application..."
+                }
+            }
+        }
         stage('deploy') {
             steps {
                 script {

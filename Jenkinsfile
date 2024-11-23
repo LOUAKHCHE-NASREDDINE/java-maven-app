@@ -1,49 +1,35 @@
-
 pipeline {
-    agent none
-    tools {
-        maven 'Maven'
-    }
-    stage('test') {
+    agent any // Use any available agent
+
+    stages {
+        stage('Test') {
             steps {
                 script {
                     echo "Testing the application..."
-                    sh 'mvn test'
                 }
             }
         }
 
-
-    stages {
-        stage('build jar') {
+        stage('Build Jar') {
             when {
-                expression {
-                    BRANCH_NAME == 'master'
-                }
+                branch 'master' // Ensure this stage runs only on the master branch
             }
             steps {
                 script {
                     echo "Building the application..."
-                    sh 'mvn package'
                 }
             }
         }
-    }
 
-    stages {
-        stage('deploy') {
+        stage('Deploy') {
             when {
-                expression {
-                    BRANCH_NAME == 'master'
-                }
+                branch 'master' // Ensure this stage runs only on the master branch
             }
             steps {
                 script {
                     echo "Deploying the application..."
-                    sh 'mvn deploy'
                 }
             }
         }
     }
-    
 }

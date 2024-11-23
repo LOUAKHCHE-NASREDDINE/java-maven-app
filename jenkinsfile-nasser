@@ -9,7 +9,6 @@ pipeline {
             steps {
                 script {
                     echo "Building the application..."
-                    sh 'mvn clean package'
                 }
             }
         }
@@ -18,23 +17,14 @@ pipeline {
                 script {
                     echo "Building the Docker image..."
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh '''
                         echo $PASSWORD | docker login -u $USERNAME --password-stdin
                         docker build -t nasser1609/nasser-repo:v2.2.2 .
                         docker push nasser1609/nasser-repo:v2.2.2
-                        '''
                     }
                 }
             }
         }
-        stage('Test') {
-            steps {
-                script {
-                    echo "Testing the application..."
-                    // Replace with actual test commands, e.g., unit or integration tests
-                }
-            }
-        }
+        
         stage('Deploy') {
             steps {
                 script {

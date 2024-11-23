@@ -1,7 +1,6 @@
-def gv
 
 pipeline {
-    agent any
+    agent none
     tools {
         maven 'Maven'
     }

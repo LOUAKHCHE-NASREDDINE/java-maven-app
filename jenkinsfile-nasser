@@ -1,41 +1,45 @@
+
 pipeline {
     agent any
     tools {
         maven 'Maven'
     }
     stages {
-        stage('build jar') {
+        stage('Build Jar') {
             steps {
                 script {
                     echo "Building the application..."
-                    sh 'mvn package'
+                    sh 'mvn clean package'
                 }
             }
         }
-        stage('build image') {
+        stage('Build Image') {
             steps {
                 script {
-                    echo "Building the docker image..."
+                    echo "Building the Docker image..."
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
-                        sh 'docker build -t nasser/myapp:2.2.2 .'
-                        sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-                        sh 'docker push nasser/myapp:2.2.2'
+                        sh """
+                        echo $PASSWORD | docker login -u $USERNAME --password-stdin
+                        docker build -t nasser/myapp:2.2.2 .
+                        docker push nasser/myapp:2.2.2
+                        """
                     }
                 }
             }
         }
-        stage('test') {
+        stage('Test') {
             steps {
                 script {
                     echo "Testing the application..."
+                    // Replace with actual test commands, e.g., unit or integration tests
                 }
             }
         }
-        stage('deploy') {
+        stage('Deploy') {
             steps {
                 script {
                     echo "Deploying the application..."
+                    // Add deployment logic here, e.g., kubectl commands or scp
                 }
             }
         }

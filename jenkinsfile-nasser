@@ -20,8 +20,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''
                         echo $PASSWORD | docker login -u $USERNAME --password-stdin
-                        docker build -t nasser/myapp:2.2.2 .
-                        docker push nasser/myapp:2.2.2
+                        docker build -t nasser1609/myapp:2.2.2 .
+                        docker push nasser1609/myapp:2.2.2
                         '''
                     }
                 }
